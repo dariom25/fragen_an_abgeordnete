@@ -1,5 +1,6 @@
 library(tidyverse)
 
+#TODO: Warum ist hier unbekannt als Partei bei?
 party_colors <- c(
   "AfD" = "#009ee0",
   "BSW" = "#7d254f",
