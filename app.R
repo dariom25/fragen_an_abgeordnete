@@ -1,6 +1,7 @@
 # load packages
 library(shiny)
 library(bslib)
+library(dplyr)
 source("plots.R")
 
 # load data
@@ -86,12 +87,15 @@ server <- function(input, output) {
     return(input$date_range)
   })
   
+  filtered_data <- reactive({
+    data |>
+      filter(question_date > validated_date_range()[1] & question_date < validated_date_range()[2]) |>
+      filter(party %in% input$selected_parties)
+  })
+  
   output$plot_party <- renderPlot({
     display_parties(
-      data,
-      validated_date_range()[1],
-      validated_date_range()[2],
-      input$selected_parties
+      filtered_data()
     )
   })
   output$plot_timeseries <- renderPlot({
@@ -99,16 +103,13 @@ server <- function(input, output) {
       data,
       as.Date(validated_date_range()[1]),
       as.Date(validated_date_range()[2]),
-      input$selected_parties,
+      filtered_data(),
       input$granularity
     )
   })
   output$plot_party_topic <- renderPlot({
     display_parties_and_topics(
-      data,
-      as.Date(validated_date_range()[1]),
-      as.Date(validated_date_range()[2]),
-      input$selected_parties
+      filtered_data()
     )
   })
 }
