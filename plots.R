@@ -1,6 +1,5 @@
 library(tidyverse)
 
-#TODO: Warum ist hier unbekannt als Partei bei?
 party_colors <- c(
   "AfD" = "#009ee0",
   "BSW" = "#7d254f",
@@ -12,8 +11,7 @@ party_colors <- c(
   "FREIE WÄHLER" = "#F7A800",
   "parteilos" = "grey",
   "SPD" = "#E3000F",
-  "SSW" = "#003c91",
-  "Unbekannt" = "black"
+  "SSW" = "#003c91"
 )
 
 display_parties <- function(data, start, end, selected) {
@@ -54,19 +52,29 @@ display_parties <- function(data, start, end, selected) {
     
 }
 
-# TODO: X-Achsenbeschriftung anpassen - Datumsangaben oder so hinzufügen
 # TODO: Gucken, warum immer Intervall + 1 angezeigt wird
 display_period <- function(data, start, end, selected, granularity) {
   
   # create intervals for data aggregation
   no_of_days <- as.integer(floor((end - start)))
-  interval_floored <- no_of_days%/%granularity
-  interval_remainder <- no_of_days%%granularity
+  interval_floored <- no_of_days %/% granularity
+  interval_remainder <- no_of_days %% granularity
   
   interval_length <- c(
-    rep(interval_floored + 1, interval_remainder),
-    rep(interval_floored, granularity - interval_remainder)
+    rep(interval_floored, granularity - interval_remainder),
+    rep(interval_floored + 1, interval_remainder)
   )
+  
+  interval_dates <- data |>
+    filter(question_date >= start & question_date <= end) |>
+    mutate(interval = findInterval(
+      as.integer(as.Date(question_date) - start), 
+      cumsum(interval_length) 
+    )) |> 
+    group_by(interval) |>
+    slice(1) |>
+    ungroup() |> 
+    select(question_date)
   
   # select and transform relevant data
   data |>
@@ -74,11 +82,11 @@ display_period <- function(data, start, end, selected, granularity) {
     filter(question_date >= start & question_date <= end) |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
-      cumsum(interval_length)
+      cumsum(interval_length) 
     )) |>
     group_by(interval, party) |>
     summarise(
-      no_of_questions = n(),
+      no_of_questions = n()
     ) |>
     ungroup() |>
     
@@ -99,7 +107,11 @@ display_period <- function(data, start, end, selected, granularity) {
       color = NULL,
       title = "Anzahl der Fragen in Zeitintervallen nach Partei"
     ) +
-    scale_x_continuous(breaks = seq(0, granularity, by = 1)) +
+    scale_x_continuous(
+      breaks = seq(0, granularity, by = 1), 
+      labels = interval_dates$question_date,
+      guide = guide_axis(angle = 45)
+    ) +
     scale_color_manual(values = party_colors) 
 }
 
