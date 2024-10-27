@@ -1,11 +1,13 @@
 # load packages
 library(shiny)
 library(bslib)
-#library(tidyverse)
 source("plots.R")
 
 # load data
-data <- read.csv(".//data//abgeordnetenwatch_data_long_preprocessed.csv", fileEncoding = "ISO-8859-1")
+data <- read.csv(
+  file.path("data", "abgeordnetenwatch_data_long_preprocessed.csv"), 
+  fileEncoding = "ISO-8859-1"
+)
 
 ui <- page_sidebar(
   title = "Informationen über die Anzahl der Fragen an Abgeordnete auf Abgeordnetenwatch.de von 2005 bis 2024",
