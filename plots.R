@@ -14,10 +14,8 @@ party_colors <- c(
   "SSW" = "#003c91"
 )
 
-display_parties <- function(data, start, end, selected) {
+display_parties <- function(data) {
   data |>
-    filter(question_date > start & question_date < end) |>
-    filter(party %in% selected) |>
     group_by(party) |>
     summarise(
       no_of_questions = n()
@@ -53,7 +51,7 @@ display_parties <- function(data, start, end, selected) {
 }
 
 # TODO: Gucken, warum immer Intervall + 1 angezeigt wird
-display_period <- function(data, start, end, selected, granularity) {
+display_period <- function(data, start, end, filtered_data, granularity) {
   
   # create intervals for data aggregation
   no_of_days <- as.integer(floor((end - start)))
@@ -77,9 +75,7 @@ display_period <- function(data, start, end, selected, granularity) {
     select(question_date)
   
   # select and transform relevant data
-  data |>
-    filter(party %in% selected) |>
-    filter(question_date >= start & question_date <= end) |>
+  filtered_data |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
       cumsum(interval_length) 
@@ -116,11 +112,9 @@ display_period <- function(data, start, end, selected, granularity) {
 }
 
 # heatmap for parties-topic frequency
-display_parties_and_topics <- function(data, start, end, selected) {
+display_parties_and_topics <- function(data) {
   
   data |>
-    filter(party %in% selected) |>
-    filter(question_date >= start & question_date <= end) |>
     group_by(topics_mapped, party) |>
     summarise(
       no_of_questions = n()
