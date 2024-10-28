@@ -1,4 +1,5 @@
-library(tidyverse)
+library(dplyr)
+library(ggplot2)
 
 party_colors <- c(
   "AfD" = "#009ee0",
