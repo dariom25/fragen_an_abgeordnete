@@ -72,11 +72,11 @@ ui <- page_sidebar(
   ),
   card(
     plotOutput("plot_party_topic")
-  ),
+  )
 
 )
 
-
+# TODO: tryCatch so einbauen, dass nachricht gezeigt wird, wenn fehler
 server <- function(input, output) {
   validated_date_range <- reactive({
     validate(
@@ -94,23 +94,47 @@ server <- function(input, output) {
   })
   
   output$plot_party <- renderPlot({
-    display_parties(
+    tryCatch({
+      display_parties(
       filtered_data()
-    )
+      )},
+      error = function(e) {
+        showNotification(
+          paste("Ups, etwas hat nicht funktioniert. Bitte ändere die Einstellungen.", e$message),
+          type = "error",
+          duration = 5
+          )
+    })
   })
   output$plot_timeseries <- renderPlot({
-    display_period(
-      data,
-      as.Date(validated_date_range()[1]),
-      as.Date(validated_date_range()[2]),
-      filtered_data(),
-      input$granularity
-    )
+    tryCatch({
+      display_period(
+        data,
+        as.Date(validated_date_range()[1]),
+        as.Date(validated_date_range()[2]),
+        filtered_data(),
+        input$granularity
+      )},
+      error = function(e) {
+        showNotification(
+          paste("Ups, etwas hat nicht funktioniert. Bitte ändere die Einstellungen.", e$message),
+          type = "error",
+          duration = 5
+        )
+    })
   })
   output$plot_party_topic <- renderPlot({
-    display_parties_and_topics(
-      filtered_data()
-    )
+    tryCatch({
+      display_parties_and_topics(
+        filtered_data()
+      )},
+      error = function(e) {
+        showNotification(
+          paste("Ups, etwas hat nicht funktioniert. Bitte ändere die Einstellungen.", e$message),
+          type = "error",
+          duration = 5
+        )
+    })
   })
 }
 
