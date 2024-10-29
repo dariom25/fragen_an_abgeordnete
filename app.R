@@ -76,7 +76,6 @@ ui <- page_sidebar(
 
 )
 
-# TODO: tryCatch so einbauen, dass nachricht gezeigt wird, wenn fehler
 server <- function(input, output) {
   validated_date_range <- reactive({
     validate(
