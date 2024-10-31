@@ -10,7 +10,7 @@ party_colors <- c(
   "CSU" = "#008AC5",
   "DIE LINKE" = "#BE3075",
   "FDP" = "#FFED00",
-  "FREIE WÄHLER" = "#F7A800",
+  "FREIE WAEHLER" = "#F7A800",
   "parteilos" = "grey",
   "SPD" = "#E3000F",
   "SSW" = "#003c91"
