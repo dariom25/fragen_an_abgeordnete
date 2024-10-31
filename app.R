@@ -79,9 +79,10 @@ ui <- page_sidebar(
 server <- function(input, output) {
   validated_date_range <- reactive({
     validate(
-      need(!is.na(input$date_range[1]), "First date is invalid!"),
-      need(!is.na(input$date_range[2]), "Second date is invalid!"),
-      need(input$date_range[1] <= input$date_range[2], "First date must be earlier than second date!")
+      need(!is.na(input$date_range[1]), "Erstes Datum ist ungültig!"),
+      need(!is.na(input$date_range[2]), "Zweites Datum ist ungültig!"),
+      need(input$date_range[1] <= input$date_range[2], "Erstes Datum muss vor zweitem Datum liegen!"),
+      need(input$date_range[1] != input$date_range[2], "Erstes Datum darf nicht gleich zweites Datum sein!")
     )
     return(input$date_range)
   })
@@ -101,7 +102,7 @@ server <- function(input, output) {
         showNotification(
           paste("Ups, etwas hat nicht funktioniert. Bitte ändere die Einstellungen.", e$message),
           type = "error",
-          duration = 5
+          duration = 15
           )
     })
   })
@@ -118,7 +119,7 @@ server <- function(input, output) {
         showNotification(
           paste("Ups, etwas hat nicht funktioniert. Bitte ändere die Einstellungen.", e$message),
           type = "error",
-          duration = 5
+          duration = 15
         )
     })
   })
@@ -131,7 +132,7 @@ server <- function(input, output) {
         showNotification(
           paste("Ups, etwas hat nicht funktioniert. Bitte ändere die Einstellungen.", e$message),
           type = "error",
-          duration = 5
+          duration = 15
         )
     })
   })
