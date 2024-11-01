@@ -65,11 +65,14 @@ display_period <- function(data, start, end, filtered_data, granularity) {
     rep(interval_floored + 1, interval_remainder)
   )
   
+  
+  
+  # get starting date for each interval
   interval_dates <- data |>
     filter(question_date >= start & question_date <= end) |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
-      cumsum(interval_length) 
+      cumsum(interval_length),
     )) |> 
     group_by(interval) |>
     slice(1) |>
@@ -80,7 +83,7 @@ display_period <- function(data, start, end, filtered_data, granularity) {
   filtered_data |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
-      cumsum(interval_length) 
+      cumsum(interval_length)
     )) |>
     group_by(interval, party) |>
     summarise(
