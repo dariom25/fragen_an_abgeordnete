@@ -2,6 +2,7 @@
 library(shiny)
 library(bslib)
 library(dplyr)
+library(stringr)
 source("plots.R")
 
 # load data
@@ -9,6 +10,9 @@ data <- read.csv(
   file.path("data", "abgeordnetenwatch_data_long_preprocessed.csv"), 
   fileEncoding = "ISO-8859-1"
 )
+
+data$party <- str_replace_all(data$party, "ü", "ue")
+data$party <- str_replace_all(data$party, "Ä", "AE")
 
 ui <- page_sidebar(
   title = "Informationen über die Anzahl der Fragen an Abgeordnete auf Abgeordnetenwatch.de von 2005 bis 2024",
@@ -42,9 +46,9 @@ ui <- page_sidebar(
         "DIE LINKE" = "DIE LINKE",
         "CSU" = "CSU",
         "parteilos" = "parteilos",
-        "FREIE WÄHLER" = "FREIE WÄHLER",
+        "FREIE WAEHLER" = "FREIE WAEHLER",
         "CDU" = "CDU",
-        "Bündnis 90/Die Grünen" = "Bündnis 90/Die Grünen",
+        "Buendnis 90/Die Gruenen" = "Buendnis 90/Die Gruenen",
         "AfD" = "AfD",
         "SSW" = "SSW"
       ),
@@ -55,9 +59,9 @@ ui <- page_sidebar(
         "DIE LINKE",
         "CSU",
         "parteilos",
-        "FREIE WÄHLER",
+        "FREIE WAEHLER",
         "CDU",
-        "Bündnis 90/Die Grünen",
+        "Buendnis 90/Die Gruenen",
         "AfD",
         "SSW"
     )),

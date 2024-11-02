@@ -5,12 +5,12 @@ library(forcats)
 party_colors <- c(
   "AfD" = "#009ee0",
   "BSW" = "#7d254f",
-  "Bündnis 90/Die Grünen" = "#409A3C",
+  "Buendnis 90/Die Gruenen" = "#409A3C",
   "CDU" = "#151518",
   "CSU" = "#008AC5",
   "DIE LINKE" = "#BE3075",
   "FDP" = "#FFED00",
-  "FREIE WÄHLER" = "#F7A800",
+  "FREIE WAEHLER" = "#F7A800",
   "parteilos" = "grey",
   "SPD" = "#E3000F",
   "SSW" = "#003c91"
