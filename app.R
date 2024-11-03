@@ -7,8 +7,7 @@ source("plots.R")
 
 # load data
 data <- read.csv(
-  file.path("data", "abgeordnetenwatch_data_long_preprocessed.csv"), 
-  fileEncoding = "ISO-8859-1"
+  file.path("data", "abgeordnetenwatch_data_long_preprocessed_utf8.csv")
 )
 
 data$party <- str_replace_all(data$party, "ü", "ue")
