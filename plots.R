@@ -40,7 +40,7 @@ display_parties <- function(data) {
         label = no_of_questions
       ),
       vjust = 0.5,
-      hjust = 0
+      hjust = -0.3
     ) +
     labs(
       x = "Anzahl der Fragen",
