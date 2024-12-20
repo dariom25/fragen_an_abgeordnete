@@ -16,6 +16,7 @@ data$party <- str_replace_all(data$party, "Ä", "AE")
 ui <- page_sidebar(
   title = "Informationen über die Anzahl der Fragen an Abgeordnete auf Abgeordnetenwatch.de von 2005 bis 2024",
   sidebar = sidebar("Wähle deine Anzeigeeinstellungen aus!",
+    width = 300,
     dateRangeInput(
       inputId = "date_range",
       label = "Zeitspanne:",
@@ -23,7 +24,7 @@ ui <- page_sidebar(
       end = "2024-08-03",
       min = "2004-12-29",
       max = "2024-08-03",
-      separator = " bis "
+      separator = " bis ",
     ),
     
     sliderInput(
