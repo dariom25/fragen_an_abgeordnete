@@ -51,7 +51,10 @@ display_parties <- function(data) {
     scale_fill_manual(values = party_colors, guide = FALSE) +
     theme_bw() + 
     theme(
-      panel.grid.minor = element_blank()
+      panel.grid.minor = element_blank(),
+      axis.title = element_text(size = 18),
+      axis.text = element_text(size = 13),
+      plot.title = element_text(face = "bold", size = 20)
     )
     
 }
@@ -120,7 +123,11 @@ display_period <- function(data, start, end, filtered_data, granularity) {
     scale_color_manual(values = party_colors) +
     theme_bw() + 
     theme(
-      panel.grid.minor = element_blank()
+      panel.grid.minor = element_blank(),
+      axis.title = element_text(size = 18),
+      axis.text = element_text(size = 13),
+      plot.title = element_text(face = "bold", size = 20),
+      legend.text = element_text(size = 13)
     )
 }
 
@@ -145,6 +152,11 @@ display_parties_and_topics <- function(data) {
     scale_fill_gradient(low = "lightblue", high = "darkred") +
     theme_bw() + 
     theme(
-      panel.grid.minor = element_blank()
+      panel.grid.minor = element_blank(),
+      axis.title = element_text(size = 18),
+      axis.text = element_text(size = 13),
+      plot.title = element_text(face = "bold", size = 20),
+      legend.title = element_text(size = 13),
+      legend.text = element_text(size = 13)
     )
 }
