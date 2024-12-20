@@ -48,7 +48,11 @@ display_parties <- function(data) {
       title = "Anzahl der insgesamt gestellten Fragen nach Partei",
       fill = "Partei"
     ) +
-    scale_fill_manual(values = party_colors, guide = FALSE) 
+    scale_fill_manual(values = party_colors, guide = FALSE) +
+    theme_bw() + 
+    theme(
+      panel.grid.minor = element_blank()
+    )
     
 }
 
@@ -113,7 +117,11 @@ display_period <- function(data, start, end, filtered_data, granularity) {
       labels = interval_dates$question_date,
       guide = guide_axis(angle = 45)
     ) +
-    scale_color_manual(values = party_colors) 
+    scale_color_manual(values = party_colors) +
+    theme_bw() + 
+    theme(
+      panel.grid.minor = element_blank()
+    )
 }
 
 # heatmap for parties-topic frequency
@@ -134,5 +142,9 @@ display_parties_and_topics <- function(data) {
       x = NULL,
       fill = "Anzahl der Fragen"
     ) +
-    scale_fill_gradient(low = "lightblue", high = "darkred")
+    scale_fill_gradient(low = "lightblue", high = "darkred") +
+    theme_bw() + 
+    theme(
+      panel.grid.minor = element_blank()
+    )
 }
