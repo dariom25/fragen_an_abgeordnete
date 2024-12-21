@@ -56,7 +56,6 @@ display_parties <- function(data) {
       axis.text = element_text(size = 13),
       plot.title = element_text(face = "bold", size = 20)
     )
-    
 }
 
 # TODO: Gucken, warum immer Intervall + 1 angezeigt wird
@@ -141,7 +140,7 @@ display_parties_and_topics <- function(data) {
     ) |>
     ungroup() |>
     ggplot(aes(x = topics_mapped, y = party, fill = no_of_questions)) +
-    geom_raster() +
+    geom_tile() +
     scale_x_discrete(guide = guide_axis(angle = 45)) +
     labs(
       y = NULL,
@@ -158,5 +157,47 @@ display_parties_and_topics <- function(data) {
       plot.title = element_text(face = "bold", size = 20),
       legend.title = element_text(size = 13),
       legend.text = element_text(size = 13)
+    )
+}
+
+display_topics <- function(data) {
+  data |>
+    group_by(topics_mapped) |>
+    summarise(
+      no_of_questions = n()
+    ) |>
+    ungroup() |>
+    arrange(no_of_questions) |>
+    mutate(topics_mapped = factor(topics_mapped, levels = topics_mapped)) |>
+    ggplot(
+      aes(
+        x = no_of_questions,
+        y = fct_rev(fct_infreq(topics_mapped)),
+        fill = topics_mapped
+      )
+    ) +
+    geom_bar(
+      stat = "identity"
+    ) +
+    geom_text(
+      aes(
+        label = no_of_questions
+      ),
+      vjust = 0.5,
+      hjust = -0.2
+    ) +
+    labs(
+      x = "Anzahl der Fragen",
+      y = NULL,
+      title = "Anzahl der insgesamt gestellten Fragen nach Partei",
+      fill = "Partei"
+    ) +
+    scale_fill_manual(values = party_colors, guide = FALSE) +
+    theme_bw() + 
+    theme(
+      panel.grid.minor = element_blank(),
+      axis.title = element_text(size = 18),
+      axis.text = element_text(size = 13),
+      plot.title = element_text(face = "bold", size = 20)
     )
 }
