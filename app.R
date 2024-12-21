@@ -14,6 +14,13 @@ data$party <- str_replace_all(data$party, "ü", "ue")
 data$party <- str_replace_all(data$party, "Ä", "AE")
 
 ui <- page_sidebar(
+  navset_bar(
+    nav_panel("Parteien gesamt", plotOutput("plot_party")),
+    nav_panel("Fragenzahl im Zeitverlauf", plotOutput("plot_timeseries")),
+    nav_panel("Topics gesamt", plotOutput("plot_topic")),
+    nav_panel("Themen im Zeitverlauf"),
+    nav_panel("Parteien X Topics", plotOutput("plot_party_topic")),
+  ),
   title = "Informationen über die Anzahl der Fragen an Abgeordnete auf Abgeordnetenwatch.de von 2005 bis 2024",
   sidebar = sidebar("Wähle deine Anzeigeeinstellungen aus!",
     width = 300,
@@ -65,19 +72,7 @@ ui <- page_sidebar(
         "AfD",
         "SSW"
     )),
-                    
-   
-  ),
-  card(
-    plotOutput("plot_timeseries")
-  ),
-  card(
-    plotOutput("plot_party")
-  ),
-  card(
-    plotOutput("plot_party_topic")
   )
-
 )
 
 server <- function(input, output) {
@@ -110,6 +105,19 @@ server <- function(input, output) {
           )
     })
   })
+  output$plot_topic <- renderPlot({
+    tryCatch({
+      display_topics(
+        filtered_data()
+      )},
+      error = function(e) {
+        showNotification(
+          paste("Ups, etwas hat nicht funktioniert. Bitte ändere die Einstellungen.", e$message),
+          type = "error",
+          duration = 15
+        )
+      })
+  })
   output$plot_timeseries <- renderPlot({
     tryCatch({
       display_period(
@@ -141,6 +149,5 @@ server <- function(input, output) {
     })
   })
 }
-
 
 shinyApp(ui = ui, server = server)
