@@ -16,6 +16,7 @@ party_colors <- c(
   "SSW" = "#003c91"
 )
 
+# bar plot for parties
 display_parties <- function(data) {
   data |>
     group_by(party) |>
@@ -58,6 +59,7 @@ display_parties <- function(data) {
     )
 }
 
+# lineplot for parties
 # TODO: Gucken, warum immer Intervall + 1 angezeigt wird
 display_period <- function(data, start, end, filtered_data, granularity) {
   
@@ -70,8 +72,6 @@ display_period <- function(data, start, end, filtered_data, granularity) {
     rep(interval_floored, granularity - interval_remainder),
     rep(interval_floored + 1, interval_remainder)
   )
-  
-  
   
   # get starting date for each interval
   interval_dates <- data |>
@@ -140,7 +140,8 @@ display_parties_and_topics <- function(data) {
     ) |>
     ungroup() |>
     ggplot(aes(x = topics_mapped, y = party, fill = no_of_questions)) +
-    geom_tile() +
+    geom_raster() +
+    geom_text(aes(label = no_of_questions)) +
     scale_x_discrete(guide = guide_axis(angle = 45)) +
     labs(
       y = NULL,
@@ -148,7 +149,7 @@ display_parties_and_topics <- function(data) {
       x = NULL,
       fill = "Anzahl der Fragen"
     ) +
-    scale_fill_gradient(low = "lightblue", high = "darkred") +
+    scale_fill_gradient(low = "white", high = "steelblue") +
     theme_bw() + 
     theme(
       panel.grid.minor = element_blank(),
@@ -160,6 +161,7 @@ display_parties_and_topics <- function(data) {
     )
 }
 
+# bar plot for topics
 display_topics <- function(data) {
   data |>
     group_by(topics_mapped) |>
