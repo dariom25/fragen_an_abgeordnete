@@ -60,27 +60,20 @@ display_parties <- function(data) {
 }
 
 # lineplot for parties
-# TODO: Gucken, warum immer Intervall + 1 angezeigt wird
-display_period <- function(data, start, end, filtered_data, granularity) {
+display_period <- function(data, start, end, filtered_data, interval_lengths) {
   
   # create intervals for data aggregation
   no_of_days <- as.integer(floor((end - start)))
-  interval_floored <- no_of_days %/% granularity
-  interval_remainder <- no_of_days %% granularity
-  
-  interval_length <- c(
-    rep(interval_floored, granularity - interval_remainder),
-    rep(interval_floored + 1, interval_remainder)
-  )
+  no_of_intervals = ceiling(no_of_days/interval_lengths)
   
   # get starting date for each interval
-  interval_dates <- data |>
-    filter(question_date >= start & question_date <= end) |>
+  interval_dates <- filtered_data |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
-      cumsum(interval_length),
-    )) |> 
+      c(0, interval_lengths*1:no_of_intervals),
+    )) |>     
     group_by(interval) |>
+    arrange(question_date) |>
     slice(1) |>
     ungroup() |> 
     select(question_date)
@@ -89,8 +82,7 @@ display_period <- function(data, start, end, filtered_data, granularity) {
   filtered_data |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
-      cumsum(interval_length)
-    )) |>
+      c(0, interval_lengths*1:no_of_intervals))) |>
     group_by(interval, party) |>
     summarise(
       no_of_questions = n()
@@ -110,12 +102,12 @@ display_period <- function(data, start, end, filtered_data, granularity) {
     geom_point(position = position_dodge(0.2))+
     labs(
       y = "Anzahl der Fragen",
-      x = paste0("Intervall (~", interval_floored, " Tage pro Intervall)"),
+      x = paste0("Intervalllänge (~", interval_lengths, " Tag(e))"),
       color = NULL,
       title = "Anzahl der Fragen in Zeitintervallen nach Partei"
     ) +
     scale_x_continuous(
-      breaks = seq(0, granularity, by = 1), 
+      breaks = c(1:length(interval_dates$question_date)), 
       labels = interval_dates$question_date,
       guide = guide_axis(angle = 45)
     ) +

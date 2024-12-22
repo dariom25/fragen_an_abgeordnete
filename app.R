@@ -18,10 +18,10 @@ ui <- page_sidebar(
     nav_panel("Parteien gesamt", plotOutput("plot_party")),
     nav_panel("Fragenzahl im Zeitverlauf", plotOutput("plot_timeseries")),
     nav_panel("Topics gesamt", plotOutput("plot_topic")),
-    nav_panel("Themen im Zeitverlauf"),
+    nav_panel("Topics im Zeitverlauf"),
     nav_panel("Parteien X Topics", plotOutput("plot_party_topic")),
   ),
-  title = "Informationen über die Anzahl der Fragen an Abgeordnete auf Abgeordnetenwatch.de von 2005 bis 2024",
+  title = "Fragen auf Abgeordnetenwatch.de von 2005 bis 2024",
   sidebar = sidebar("Wähle deine Anzeigeeinstellungen aus!",
     width = 300,
     dateRangeInput(
@@ -36,10 +36,10 @@ ui <- page_sidebar(
     
     sliderInput(
       inputId = "granularity",
-      label = "Granularität:",
+      label = "Zeitintervall (in Tagen):",
       min = 1,
       max = 365,
-      value = 21,
+      value = 365,
       ticks = FALSE
     ),
     
