@@ -88,7 +88,7 @@ server <- function(input, output) {
   
   filtered_data <- reactive({
     data |>
-      filter(question_date > validated_date_range()[1] & question_date < validated_date_range()[2]) |>
+      filter(question_date >= validated_date_range()[1] & question_date <= validated_date_range()[2]) |>
       filter(party %in% input$selected_parties)
   })
   

@@ -67,7 +67,7 @@ display_period <- function(data, start, end, filtered_data, interval_lengths) {
   no_of_intervals = ceiling(no_of_days/interval_lengths)
   
   # get starting date for each interval
-  interval_dates <- filtered_data |>
+  interval_dates <- data |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
       c(0, interval_lengths*1:no_of_intervals),
