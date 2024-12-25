@@ -183,3 +183,54 @@ display_topics <- function(data) {
       plot.title = element_text(face = "bold", size = 20)
     )
 }
+
+# lineplot for topics
+display_period_topics <- function(start, end, filtered_data, interval_lengths) {
+  
+  # create intervals for data aggregation
+  no_of_days <- as.integer(floor((end - start)))
+  no_of_intervals = ceiling(no_of_days/interval_lengths)
+  
+  # get starting date for each interval
+  starting_interval_date <- seq(start, end, by = interval_lengths)
+  
+  # select and transform relevant data
+  filtered_data |>
+    mutate(interval = findInterval(
+      as.integer(as.Date(question_date) - start), 
+      c(0, interval_lengths*1:no_of_intervals))) |>
+    group_by(interval, topics_mapped) |>
+    summarise(no_of_questions = n(), .groups = "drop") |>
+    
+    # create plot
+    ggplot(
+      aes(
+        x = interval,
+        y = no_of_questions,
+        colour = topics_mapped,
+        group = topics_mapped
+      )
+    ) +
+    geom_line(position = position_dodge(0.2)) +
+    geom_point(position = position_dodge(0.2))+
+    labs(
+      y = "Anzahl der Fragen",
+      x = paste0("Intervalllänge (~", interval_lengths, " Tag(e))"),
+      color = NULL,
+      title = "Anzahl der Fragen in Zeitintervallen nach Topic"
+    ) +
+    scale_x_continuous(
+      breaks = c(1:length(starting_interval_date)), 
+      labels = starting_interval_date,
+      guide = guide_axis(angle = 90)
+    ) +
+    #scale_color_manual(values = party_colors) +
+    theme_bw() + 
+    theme(
+      panel.grid.minor = element_blank(),
+      axis.title = element_text(size = 18),
+      axis.text = element_text(size = 13),
+      plot.title = element_text(face = "bold", size = 20),
+      legend.text = element_text(size = 13)
+    )
+}

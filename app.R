@@ -18,7 +18,7 @@ ui <- page_sidebar(
     nav_panel("Parteien gesamt", plotOutput("plot_party")),
     nav_panel("Fragenzahl im Zeitverlauf", plotOutput("plot_timeseries")),
     nav_panel("Topics gesamt", plotOutput("plot_topic")),
-    nav_panel("Topics im Zeitverlauf"),
+    nav_panel("Topics im Zeitverlauf", plotOutput("plot_timeseries_topics")),
     nav_panel("Parteien X Topics", plotOutput("plot_party_topic")),
   ),
   title = "Fragen auf Abgeordnetenwatch.de von 2005 bis 2024",
@@ -72,6 +72,39 @@ ui <- page_sidebar(
         "AfD",
         "SSW"
     )),
+    checkboxGroupInput(
+      inputId = "selected_topics",
+      label = "Topics:",
+      choices = list(
+        "Arbeit und Beschäftigung" = "Arbeit und Beschäftigung",
+        "Außenpolitische Themen" = "Außenpolitische Themen",
+        "Bildung und Forschung" = "Bildung und Forschung",
+        "Digitales" = "Digitales",
+        "Energie und Umwelt" = "Energie und Umwelt",
+        "Finanzen und Wirtschaft" = "Finanzen und Wirtschaft",
+        "Frauen, Jugend, Familie" = "Frauen, Jugend, Familie",
+        "Gesundheit und Ernährung" = "Gesundheit und Ernährung",
+        "Inneres und Sicherheit" = "Inneres und Sicherheit",
+        "Migration und Aufenthaltsrecht" = "Migration und Aufenthaltsrecht",
+        "Politik und Parteien" = "Politik und Parteien",
+        "Sport, Kultur und Tourismus" = "Sport, Kultur und Tourismus",
+        "Wahlen" = "Wahlen"
+      ),
+      selected = c(
+        "Arbeit und Beschäftigung",
+        "Außenpolitische Themen",
+        "Bildung und Forschung",
+        "Digitales",
+        "Energie und Umwelt",
+        "Finanzen und Wirtschaft",
+        "Frauen, Jugend, Familie",
+        "Gesundheit und Ernährung",
+        "Inneres und Sicherheit",
+        "Migration und Aufenthaltsrecht",
+        "Politik und Parteien",
+        "Sport, Kultur und Tourismus",
+        "Wahlen"
+    ))
   )
 )
 
@@ -92,6 +125,12 @@ server <- function(input, output) {
       filter(party %in% input$selected_parties)
   })
   
+  filtered_data_topics <- reactive({
+    data |>
+      filter(question_date >= validated_date_range()[1] & question_date <= validated_date_range()[2]) |>
+      filter(topics_mapped %in% input$selected_topics)
+  })
+  
   output$plot_party <- renderPlot({
     tryCatch({
       display_parties(
@@ -108,7 +147,7 @@ server <- function(input, output) {
   output$plot_topic <- renderPlot({
     tryCatch({
       display_topics(
-        filtered_data()
+        filtered_data_topics()
       )},
       error = function(e) {
         showNotification(
@@ -147,6 +186,22 @@ server <- function(input, output) {
         )
     })
   })
+  output$plot_timeseries_topics <- renderPlot({
+      tryCatch({
+        display_period(
+          as.Date(validated_date_range()[1]),
+          as.Date(validated_date_range()[2]),
+          filtered_data(),
+          input$granularity
+        )},
+        error = function(e) {
+          showNotification(
+            paste("Ups, etwas hat nicht funktioniert. Bitte ändere die Einstellungen.", e$message),
+            type = "error",
+            duration = 15
+          )
+        })
+    })
 }
 
 shinyApp(ui = ui, server = server)
