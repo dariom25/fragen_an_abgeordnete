@@ -15,18 +15,7 @@ display_period <- function(data, start, end, interval_lengths, parties) {
   no_of_intervals = ceiling(no_of_days/interval_lengths)
 
   # get starting date for each interval
-  interval_dates <- data |>
-    filter(question_date >= start & question_date <= end) |>
-    filter(party %in% parties) |>
-    mutate(interval = findInterval(
-      as.integer(as.Date(question_date) - start), 
-      c(0, interval_lengths*1:no_of_intervals),
-    )) |>     
-    group_by(interval) |>
-    arrange(question_date) |>
-    slice(1) |>
-    ungroup() |> 
-    select(question_date)
+  starting_interval_date <- seq(start, end, by = interval_lengths)
   
   # select and transform relevant data
   data |>
@@ -37,10 +26,9 @@ display_period <- function(data, start, end, interval_lengths, parties) {
       c(0, interval_lengths*1:no_of_intervals))) |>
     group_by(interval, party) |>
     summarise(
-      no_of_questions = n()
+      no_of_questions = n(), .groups = "drop" # wenn fragen = 0, dann tauchen sie nicht im neuen datensatz auf
     ) |>
-    ungroup() |>
-    
+
     # create plot
     ggplot(
       aes(
@@ -59,9 +47,9 @@ display_period <- function(data, start, end, interval_lengths, parties) {
       title = "Anzahl der Fragen in Zeitintervallen nach Partei"
     ) +
     scale_x_continuous(
-      breaks = c(1:length(interval_dates$question_date)), 
-      labels = interval_dates$question_date,
-      guide = guide_axis(angle = 45)
+      breaks = c(1:length(starting_interval_date)), 
+      labels = starting_interval_date,
+      guide = guide_axis(angle = 90)
     ) +
     #scale_color_manual(values = party_colors) +
     theme_bw() + 
@@ -74,5 +62,5 @@ display_period <- function(data, start, end, interval_lengths, parties) {
     )
 }
 
-display_period(data, as.Date("2019-02-21"), as.Date("2024-08-03"), 60, c("SPD", "SSW", "FDP"))
+display_period(data, as.Date("2019-02-21"), as.Date("2024-08-03"), 160, c("SPD", "SSW", "FDP"))
 
