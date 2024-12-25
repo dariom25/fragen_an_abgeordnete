@@ -99,7 +99,7 @@ display_period <- function(start, end, filtered_data, interval_lengths) {
       labels = starting_interval_date,
       guide = guide_axis(angle = 90)
     ) +
-    #scale_color_manual(values = party_colors) +
+    scale_color_manual(values = party_colors) +
     theme_bw() + 
     theme(
       panel.grid.minor = element_blank(),
