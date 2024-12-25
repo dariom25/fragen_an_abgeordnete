@@ -121,7 +121,6 @@ server <- function(input, output) {
   output$plot_timeseries <- renderPlot({
     tryCatch({
       display_period(
-        data,
         as.Date(validated_date_range()[1]),
         as.Date(validated_date_range()[2]),
         filtered_data(),
