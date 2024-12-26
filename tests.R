@@ -25,9 +25,7 @@ display_period <- function(data, start, end, interval_lengths, parties) {
       as.integer(as.Date(question_date) - start), 
       c(0, interval_lengths*1:no_of_intervals))) |>
     group_by(interval, party) |>
-    summarise(
-      no_of_questions = n(), .groups = "drop" # wenn fragen = 0, dann tauchen sie nicht im neuen datensatz auf
-    ) |>
+    summarise(no_of_questions = n(), .groups = "drop") |>
 
     # create plot
     ggplot(
