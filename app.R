@@ -188,10 +188,10 @@ server <- function(input, output) {
   })
   output$plot_timeseries_topics <- renderPlot({
       tryCatch({
-        display_period(
+        display_period_topics(
           as.Date(validated_date_range()[1]),
           as.Date(validated_date_range()[2]),
-          filtered_data(),
+          filtered_data_topics(),
           input$granularity
         )},
         error = function(e) {
