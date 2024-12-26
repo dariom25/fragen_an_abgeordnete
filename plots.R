@@ -1,6 +1,7 @@
 library(dplyr)
 library(ggplot2)
 library(forcats)
+library(RColorBrewer)
 
 party_colors <- c(
   "AfD" = "#009ee0",
@@ -15,6 +16,10 @@ party_colors <- c(
   "SPD" = "#E3000F",
   "SSW" = "#003c91"
 )
+
+# create colorpalette for topics
+colors <- brewer.pal(12, "Paired")
+colors <- c(colors, "#E41A1C") 
 
 # bar plot for parties
 display_parties <- function(data) {
@@ -171,10 +176,10 @@ display_topics <- function(data) {
     labs(
       x = "Anzahl der Fragen",
       y = NULL,
-      title = "Anzahl der insgesamt gestellten Fragen nach Partei",
+      title = "Anzahl der insgesamt gestellten Fragen nach Topic",
       fill = "Partei"
     ) +
-    scale_fill_manual(values = party_colors, guide = FALSE) +
+    scale_fill_manual(values = colors, guide = FALSE) +
     theme_bw() + 
     theme(
       panel.grid.minor = element_blank(),
@@ -186,6 +191,8 @@ display_topics <- function(data) {
 
 # lineplot for topics
 display_period_topics <- function(start, end, filtered_data, interval_lengths) {
+  
+
   
   # create intervals for data aggregation
   no_of_days <- as.integer(floor((end - start)))
@@ -219,6 +226,7 @@ display_period_topics <- function(start, end, filtered_data, interval_lengths) {
       color = NULL,
       title = "Anzahl der Fragen in Zeitintervallen nach Topic"
     ) +
+    scale_color_manual(values = colors) +
     scale_x_continuous(
       breaks = c(1:length(starting_interval_date)), 
       labels = starting_interval_date,
