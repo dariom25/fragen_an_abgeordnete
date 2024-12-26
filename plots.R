@@ -201,7 +201,7 @@ display_period_topics <- function(start, end, filtered_data, interval_lengths) {
       c(0, interval_lengths*1:no_of_intervals))) |>
     group_by(interval, topics_mapped) |>
     summarise(no_of_questions = n(), .groups = "drop") |>
-    
+  
     # create plot
     ggplot(
       aes(
@@ -224,7 +224,6 @@ display_period_topics <- function(start, end, filtered_data, interval_lengths) {
       labels = starting_interval_date,
       guide = guide_axis(angle = 90)
     ) +
-    #scale_color_manual(values = party_colors) +
     theme_bw() + 
     theme(
       panel.grid.minor = element_blank(),
