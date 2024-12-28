@@ -112,16 +112,14 @@ ui <- page_sidebar(
       accordion_panel(
         "Parteien",
         selected_parties
-      )
-    ),
+    )),
     
     accordion(
       open = FALSE,
       accordion_panel(
         "Topics",
         selected_topics
-      )
-    ),
+    )),
     
   )
 )
@@ -137,7 +135,7 @@ server <- function(input, output) {
     return(input$date_range)
   })
   
-  filtered_data <- reactive({
+  filtered_data_parties <- reactive({
     data |>
       filter(question_date >= validated_date_range()[1] & question_date <= validated_date_range()[2]) |>
       filter(party %in% input$selected_parties)
@@ -152,7 +150,7 @@ server <- function(input, output) {
   output$plot_party <- renderPlot({
     tryCatch({
       display_parties(
-      filtered_data()
+      filtered_data_parties()
       )},
       error = function(e) {
         showNotification(
@@ -180,7 +178,7 @@ server <- function(input, output) {
       display_period(
         as.Date(validated_date_range()[1]),
         as.Date(validated_date_range()[2]),
-        filtered_data(),
+        filtered_data_parties(),
         input$granularity
       )},
       error = function(e) {
@@ -194,7 +192,7 @@ server <- function(input, output) {
   output$plot_party_topic <- renderPlot({
     tryCatch({
       display_parties_and_topics(
-        filtered_data()
+        filtered_data_parties()
       )},
       error = function(e) {
         showNotification(
