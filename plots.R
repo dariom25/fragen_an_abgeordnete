@@ -19,7 +19,22 @@ party_colors <- c(
 
 # create colorpalette for topics
 colors <- brewer.pal(12, "Paired")
-colors <- c(colors, "#E41A1C") 
+colors <- c(colors, "#E41A1C")
+topic_colors <- c(
+  "Arbeit und Beschäftigung" = colors[1],
+  "Außenpolitische Themen" = colors[2],
+  "Bildung und Forschung" = colors[3],
+  "Digitales" = colors[4],
+  "Energie und Umwelt" = colors[5],
+  "Finanzen und Wirtschaft" = colors[6],
+  "Frauen, Jugend, Familie" = colors[7],
+  "Gesundheit und Ernährung" = colors[8],
+  "Inneres und Sicherheit" = colors[9],
+  "Migration und Aufenthaltsrecht" = colors[10],
+  "Politik und Parteien" = colors[11],
+  "Sport, Kultur und Tourismus" = colors[12],
+  "Wahlen" = colors[13]
+)
 
 # bar plot for parties
 display_parties <- function(data) {
@@ -179,7 +194,7 @@ display_topics <- function(data) {
       title = "Anzahl der insgesamt gestellten Fragen nach Topic",
       fill = "Partei"
     ) +
-    scale_fill_manual(values = colors, guide = FALSE) +
+    scale_fill_manual(values = topic_colors, guide = FALSE) +
     theme_bw() + 
     theme(
       panel.grid.minor = element_blank(),
@@ -226,7 +241,7 @@ display_period_topics <- function(start, end, filtered_data, interval_lengths) {
       color = NULL,
       title = "Anzahl der Fragen in Zeitintervallen nach Topic"
     ) +
-    scale_color_manual(values = colors) +
+    scale_color_manual(values = topic_colors) +
     scale_x_continuous(
       breaks = c(1:length(starting_interval_date)), 
       labels = starting_interval_date,
