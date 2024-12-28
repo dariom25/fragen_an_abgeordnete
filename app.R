@@ -13,6 +13,70 @@ data <- read.csv(
 data$party <- str_replace_all(data$party, "ü", "ue")
 data$party <- str_replace_all(data$party, "Ä", "AE")
 
+selected_parties <- checkboxGroupInput(
+  inputId = "selected_parties", 
+  label = "Parteien:",
+  choices = list(
+    "SPD" = "SPD",
+    "FDP" = "FDP",
+    "BSW" = "BSW",
+    "DIE LINKE" = "DIE LINKE",
+    "CSU" = "CSU",
+    "parteilos" = "parteilos",
+    "FREIE WAEHLER" = "FREIE WAEHLER",
+    "CDU" = "CDU",
+    "Buendnis 90/Die Gruenen" = "Buendnis 90/Die Gruenen",
+    "AfD" = "AfD",
+    "SSW" = "SSW"
+  ),
+  selected = c(
+    "SPD",
+    "FDP",
+    "BSW",
+    "DIE LINKE",
+    "CSU",
+    "parteilos",
+    "FREIE WAEHLER",
+    "CDU",
+    "Buendnis 90/Die Gruenen",
+    "AfD",
+    "SSW"
+  ))
+
+selected_topics <- checkboxGroupInput(
+  inputId = "selected_topics",
+  label = "Topics:",
+  choices = list(
+    "Arbeit und Beschäftigung" = "Arbeit und Beschäftigung",
+    "Außenpolitische Themen" = "Außenpolitische Themen",
+    "Bildung und Forschung" = "Bildung und Forschung",
+    "Digitales" = "Digitales",
+    "Energie und Umwelt" = "Energie und Umwelt",
+    "Finanzen und Wirtschaft" = "Finanzen und Wirtschaft",
+    "Frauen, Jugend, Familie" = "Frauen, Jugend, Familie",
+    "Gesundheit und Ernährung" = "Gesundheit und Ernährung",
+    "Inneres und Sicherheit" = "Inneres und Sicherheit",
+    "Migration und Aufenthaltsrecht" = "Migration und Aufenthaltsrecht",
+    "Politik und Parteien" = "Politik und Parteien",
+    "Sport, Kultur und Tourismus" = "Sport, Kultur und Tourismus",
+    "Wahlen" = "Wahlen"
+  ),
+  selected = c(
+    "Arbeit und Beschäftigung",
+    "Außenpolitische Themen",
+    "Bildung und Forschung",
+    "Digitales",
+    "Energie und Umwelt",
+    "Finanzen und Wirtschaft",
+    "Frauen, Jugend, Familie",
+    "Gesundheit und Ernährung",
+    "Inneres und Sicherheit",
+    "Migration und Aufenthaltsrecht",
+    "Politik und Parteien",
+    "Sport, Kultur und Tourismus",
+    "Wahlen"
+  ))
+
 ui <- page_sidebar(
   navset_bar(
     nav_panel("Parteien gesamt", plotOutput("plot_party")),
@@ -42,69 +106,23 @@ ui <- page_sidebar(
       value = 365,
       ticks = FALSE
     ),
+      
+    accordion(
+      open = FALSE,
+      accordion_panel(
+        "Parteien",
+        selected_parties
+      )
+    ),
     
-    checkboxGroupInput(
-      inputId = "selected_parties", 
-      label = "Parteien:",
-      choices = list(
-        "SPD" = "SPD",
-        "FDP" = "FDP",
-        "BSW" = "BSW",
-        "DIE LINKE" = "DIE LINKE",
-        "CSU" = "CSU",
-        "parteilos" = "parteilos",
-        "FREIE WAEHLER" = "FREIE WAEHLER",
-        "CDU" = "CDU",
-        "Buendnis 90/Die Gruenen" = "Buendnis 90/Die Gruenen",
-        "AfD" = "AfD",
-        "SSW" = "SSW"
-      ),
-      selected = c(
-        "SPD",
-        "FDP",
-        "BSW",
-        "DIE LINKE",
-        "CSU",
-        "parteilos",
-        "FREIE WAEHLER",
-        "CDU",
-        "Buendnis 90/Die Gruenen",
-        "AfD",
-        "SSW"
-    )),
-    checkboxGroupInput(
-      inputId = "selected_topics",
-      label = "Topics:",
-      choices = list(
-        "Arbeit und Beschäftigung" = "Arbeit und Beschäftigung",
-        "Außenpolitische Themen" = "Außenpolitische Themen",
-        "Bildung und Forschung" = "Bildung und Forschung",
-        "Digitales" = "Digitales",
-        "Energie und Umwelt" = "Energie und Umwelt",
-        "Finanzen und Wirtschaft" = "Finanzen und Wirtschaft",
-        "Frauen, Jugend, Familie" = "Frauen, Jugend, Familie",
-        "Gesundheit und Ernährung" = "Gesundheit und Ernährung",
-        "Inneres und Sicherheit" = "Inneres und Sicherheit",
-        "Migration und Aufenthaltsrecht" = "Migration und Aufenthaltsrecht",
-        "Politik und Parteien" = "Politik und Parteien",
-        "Sport, Kultur und Tourismus" = "Sport, Kultur und Tourismus",
-        "Wahlen" = "Wahlen"
-      ),
-      selected = c(
-        "Arbeit und Beschäftigung",
-        "Außenpolitische Themen",
-        "Bildung und Forschung",
-        "Digitales",
-        "Energie und Umwelt",
-        "Finanzen und Wirtschaft",
-        "Frauen, Jugend, Familie",
-        "Gesundheit und Ernährung",
-        "Inneres und Sicherheit",
-        "Migration und Aufenthaltsrecht",
-        "Politik und Parteien",
-        "Sport, Kultur und Tourismus",
-        "Wahlen"
-    ))
+    accordion(
+      open = FALSE,
+      accordion_panel(
+        "Topics",
+        selected_topics
+      )
+    ),
+    
   )
 )
 
