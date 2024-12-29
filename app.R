@@ -80,7 +80,7 @@ selected_topics <- checkboxGroupInput(
 ui <- page_sidebar(
   navset_bar(
     nav_panel("Parteien gesamt", plotOutput("plot_party")),
-    nav_panel("Fragenzahl im Zeitverlauf", plotOutput("plot_timeseries")),
+    nav_panel("Fragenzahl im Zeitverlauf", plotlyOutput("plot_timeseries")),
     nav_panel("Topics gesamt", plotOutput("plot_topic")),
     nav_panel("Topics im Zeitverlauf", plotOutput("plot_timeseries_topics")),
     nav_panel("Parteien X Topics", plotOutput("plot_party_topic")),
@@ -173,7 +173,7 @@ server <- function(input, output) {
         )
       })
   })
-  output$plot_timeseries <- renderPlot({
+  output$plot_timeseries <- renderPlotly({
     tryCatch({
       display_period(
         as.Date(validated_date_range()[1]),

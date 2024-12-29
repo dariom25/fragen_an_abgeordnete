@@ -2,6 +2,7 @@ library(dplyr)
 library(ggplot2)
 library(forcats)
 library(RColorBrewer)
+library(plotly)
 
 party_colors <- c(
   "AfD" = "#009ee0",
@@ -88,9 +89,9 @@ display_period <- function(start, end, filtered_data, interval_lengths) {
   
   # get starting date for each interval
   starting_interval_date <- seq(start, end, by = interval_lengths)
-  
+
   # select and transform relevant data
-  filtered_data |>
+  plot <- filtered_data |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
       c(0, interval_lengths*1:no_of_intervals))) |>
@@ -103,7 +104,12 @@ display_period <- function(start, end, filtered_data, interval_lengths) {
         x = interval,
         y = no_of_questions,
         colour = party,
-        group = party
+        group = party,
+        text = paste(
+          "Partei:", party,
+          "<br>Fragen:", no_of_questions,
+          "<br>Intervallstart:", as.character(starting_interval_date[interval])
+        )
       )
     ) +
     geom_line(position = position_dodge(0.2)) +
@@ -116,8 +122,7 @@ display_period <- function(start, end, filtered_data, interval_lengths) {
     ) +
     scale_x_continuous(
       breaks = c(1:length(starting_interval_date)), 
-      labels = starting_interval_date,
-      guide = guide_axis(angle = 90)
+      labels = starting_interval_date
     ) +
     scale_color_manual(values = party_colors) +
     theme_bw() + 
@@ -127,6 +132,12 @@ display_period <- function(start, end, filtered_data, interval_lengths) {
       axis.text = element_text(size = 13),
       plot.title = element_text(face = "bold", size = 20),
       legend.text = element_text(size = 13)
+    )
+  ggplotly(plot, tooltip = "text") |>
+    layout(
+      xaxis = list(
+        tickangle = 90
+      )
     )
 }
 
