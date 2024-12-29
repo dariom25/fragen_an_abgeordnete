@@ -14,5 +14,4 @@ In der dritten Grafik wird eine Heatmap dargestellt, die angibt wie viele Frage 
 Als Datengrundlage dient ein selbst zusammengestellter Datensatz, der alle Fragen und Antworten der gewählten Abgeordneten auf Abgeordnetenwatch.de zum 03.08.2024 enthält. Da bei der Datenerhebung nur zum Zeitpunkt der Erhebung gewählte Abgeordnete berücksichtigt werden, sind die Daten bis ca. 2019 nicht vollständig, weil nicht alle Abgeordneten, die 2024 gewählt sind, schon vorher gewählt waren.
 
 ## Bekannte Probleme
-- Ein Intervalltick zu viel in Grafik 1
 - Es lässt sich nicht ein einzelner Tag auswählen
