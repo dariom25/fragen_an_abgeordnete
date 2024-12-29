@@ -51,7 +51,7 @@ display_parties <- function(data) {
       aes(
         x = no_of_questions,
         y = fct_rev(fct_infreq(party)),
-        fill = party
+        fill = party,
       )
     ) +
     geom_bar(
@@ -61,7 +61,7 @@ display_parties <- function(data) {
       aes(
         label = no_of_questions
       ),
-      vjust = 0.5,
+      vjust = 0.5, 
       hjust = -0.2
     ) +
     labs(
@@ -218,8 +218,6 @@ display_topics <- function(data) {
 # lineplot for topics
 display_period_topics <- function(start, end, filtered_data, interval_lengths) {
   
-
-  
   # create intervals for data aggregation
   no_of_days <- as.integer(floor((end - start)))
   no_of_intervals = ceiling(no_of_days/interval_lengths)
@@ -228,7 +226,7 @@ display_period_topics <- function(start, end, filtered_data, interval_lengths) {
   starting_interval_date <- seq(start, end, by = interval_lengths)
   
   # select and transform relevant data
-  filtered_data |>
+  plot <- filtered_data |>
     mutate(interval = findInterval(
       as.integer(as.Date(question_date) - start), 
       c(0, interval_lengths*1:no_of_intervals))) |>
@@ -241,7 +239,12 @@ display_period_topics <- function(start, end, filtered_data, interval_lengths) {
         x = interval,
         y = no_of_questions,
         colour = topics_mapped,
-        group = topics_mapped
+        group = topics_mapped,
+        text = paste(
+          "Topic:", topics_mapped,
+          "<br>Fragen:", no_of_questions,
+          "<br>Intervallstart:", as.character(starting_interval_date[interval])
+        )
       )
     ) +
     geom_line(position = position_dodge(0.2)) +
@@ -265,5 +268,12 @@ display_period_topics <- function(start, end, filtered_data, interval_lengths) {
       axis.text = element_text(size = 13),
       plot.title = element_text(face = "bold", size = 20),
       legend.text = element_text(size = 13)
+    )
+  
+  ggplotly(plot, tooltip = "text") |>
+    layout(
+      xaxis = list(
+        tickangle = 90
+      )
     )
 }

@@ -82,7 +82,7 @@ ui <- page_sidebar(
     nav_panel("Parteien gesamt", plotOutput("plot_party")),
     nav_panel("Fragenzahl im Zeitverlauf", plotlyOutput("plot_timeseries")),
     nav_panel("Topics gesamt", plotOutput("plot_topic")),
-    nav_panel("Topics im Zeitverlauf", plotOutput("plot_timeseries_topics")),
+    nav_panel("Topics im Zeitverlauf", plotlyOutput("plot_timeseries_topics")),
     nav_panel("Parteien X Topics", plotOutput("plot_party_topic")),
   ),
   title = "Fragen auf Abgeordnetenwatch.de von 2005 bis 2024",
@@ -202,7 +202,7 @@ server <- function(input, output) {
         )
     })
   })
-  output$plot_timeseries_topics <- renderPlot({
+  output$plot_timeseries_topics <- renderPlotly({
       tryCatch({
         display_period_topics(
           as.Date(validated_date_range()[1]),
